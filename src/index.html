@@ -1,14 +1,40 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8"/>
-    <title><%= htmlWebpackPlugin.options.title %></title>
-    <link rel="stylesheet" href="assets/styles.css">
-  </head>
-  <body>
-    <p>
-      Hello! Open the developer tools, please.<br />
-      Start by editing the files in <code>src/</code> folder.
-    </p>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lounari</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="normalize.css">
+</head>
+<body>
+<nav>
+  <a></a>
+  <a></a>
+  <a></a>
+
+</nav>
+<header id="showcase">
+  <div>
+
+  </div>
+</header>
+<main>
+  <div>
+    <p>Mitä tänään syötäisiin? Tuttu tarina ennen lounashetkeä. Palvelu etsii lähelläsi olevat lounaspaikat, sekä näyttää niiden päivittäisen lounaslistan. Viikottaiset lounaslistat ovat myös käytettävissäsi. Pääset niihin klikkaamalla ravintolan logoa.</p>
+
+  </div>
+  <div class="card">
+    <h1>Sodexo</h1>
+    <ul id="courselist"></ul>
+  </div>
+  <div class="card">
+
+  </div>
+
+  <button id="switch-lang">Switch language</button>
+  <button id="sort-menu">Sort menu</button>
+  <button id="pick-dish">Pick random dish</button>
+</main>
+<script src="index.js"></script>
+</body>
 </html>
