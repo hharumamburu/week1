@@ -1,12 +1,19 @@
 'use strict';
-
-let randomNumber = Math.floor(Math.random() * 100) + 1;
+const lowestNumber = 1;
+const highestNumber = 100;
+let randomNumber = Math.floor(Math.random() * highestNumber) + lowestNumber;
 const guesses = document.querySelector('.guesses');
 const lastResult = document.querySelector('.lastResult');
 const lowOrHi = document.querySelector('.lowOrHi');
 const guessSubmit = document.querySelector('.guessSubmit');
 const guessField = document.querySelector('.guessField');
-const guessCount = 1;
+const total = document.querySelector(".totalGuesses");
+const timeSpent = document.querySelector(".time");
+let timeStart = Date.now();
+let timeElapsed = 0;
+let timeInSeconds = 0;
+const maxGuessCount = 10;
+let  guessCount = 1;
 let resetButton;
 
 function checkGuess() {
@@ -22,7 +29,7 @@ function checkGuess() {
     lastResult.style.backgroundColor = 'green';
     lowOrHi.textContent = '';
     setGameOver();
-  } else if (guessCount === 10) {
+  } else if (guessCount === maxGuessCount) {
     lastResult.textContent = '!!!GAME OVER!!!';
     lowOrHi.textContent = '';
     setGameOver();
@@ -50,6 +57,10 @@ function setGameOver() {
   resetButton.textContent = 'Start new game';
   document.body.appendChild(resetButton);
   resetButton.addEventListener('click', resetGame);
+  total.textContent = 'Number of guesses: ' + guessCount;
+  timeElapsed = Date.now() - timeStart;
+  timeInSeconds = timeElapsed / 1000;
+  timeSpent.textContent = 'Time in seconds: ' + timeInSeconds;
 }
 
 function resetGame() {
