@@ -1,19 +1,13 @@
 'use strict';
 
-const coursesEn = ["Hamburger, cream sauce and poiled potates",
-  "Goan style fish curry and whole grain rice",
-  "Vegan Chili sin carne and whole grain rice",
-  "Broccoli puree soup, side salad with two napas",
-  "Lunch baguette with BBQ-turkey filling",
-  "Cheese / Chicken / Vege / Halloum burger and french fries"];
-const coursesFi = ["Jauhelihapihvi, ruskeaa kermakastiketta ja keitettyä perunaa",
-  "Goalaista kalacurrya ja täysjyväriisiä",
-  "vegaani Chili sin carne ja täysjyväriisi",
-  "Parsakeittoa,lisäkesalaatti kahdella napaksella",
-  "Lunch baguette with BBQ-turkey filling",
-  "Juusto / Kana / Kasvis / Halloumi burgeri ja ranskalaiset"];
+import Lunchmenu from './assets/sodexo-menu.json';
 
+console.log('lunch menu json', Lunchmenu);
+
+let coursesEn = [];
+let coursesFi = [];
 let languageSetting = 'fi';
+
 
 /**
  * Displays lunch menu items as html list
@@ -21,7 +15,7 @@ let languageSetting = 'fi';
  * @param {Array} menu - Lunch menu array
  */
 const renderMenu = (menu) => {
-  const list = document.querySelector('#courselist');
+  const list = document.querySelector('#sodexo');
   list.innerHTML = '';
   for (const item of menu) {
     const listItem = document.createElement('li');
@@ -29,6 +23,7 @@ const renderMenu = (menu) => {
     list.appendChild(listItem);
   }
 };
+
 
 /**
  * Switch app lang en/fi
@@ -45,7 +40,7 @@ const switchLanguage = () => {
 };
 
 /**
- * Sorts menu alphabetically
+ * Sorts menu alphapetically
  *
  * @param {Array} menu
  * @param {string} order
@@ -59,14 +54,17 @@ const sortMenu = (menu, order) => {
   }
 };
 
+/**
+ * Eventhandler for sort menu button
+ */
 const renderSortedMenu = () => {
   if (languageSetting === 'en') {
     renderMenu(sortMenu(coursesEn, 'asc'));
   } else {
-    renderMenu(sortMenu(coursesFi, 'asc'));
+    renderMenu(sortMenu(coursesFi, 'desc'));
   }
-
 };
+
 /**
  * Picks a random dish from lunch menu array
  *
@@ -82,12 +80,27 @@ const displayRandomDish = () => {
   alert(pickRandomDish(coursesFi));
 };
 
+
+/**
+ * Parses couse arrays from Sodexo json file
+ *
+ * @param {Object} sodexoDailyMenu
+ */
+const parseSodexoMenu = (sodexoDailyMenu) => {
+  const courses = Object.values(sodexoDailyMenu);
+  for (const course of courses) {
+    coursesEn.push(course.title_en);
+    coursesFi.push(course.title_fi);
+  }
+};
+
+
 const init = () => {
+  parseSodexoMenu(Lunchmenu.courses);
   document.querySelector('#switch-lang').addEventListener('click', switchLanguage);
   document.querySelector('#sort-menu').addEventListener('click', renderSortedMenu);
   document.querySelector('#pick-dish').addEventListener('click', displayRandomDish);
   renderMenu(coursesFi);
-
 };
 init();
 
