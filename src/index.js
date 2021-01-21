@@ -1,107 +1,73 @@
 'use strict';
 
-import Lunchmenu from './assets/sodexo-menu.json';
+import FazerMenu from './assets/fazer-example.json';
 
-console.log('lunch menu json', Lunchmenu);
+const menu = [
+  {name: 'Lingonberry jam', price: 4.00},
+  {name: 'Mushroom and bean casserole', price: 5.50},
+  {name: 'Chili-flavoured wheat', price: 3.00},
+  {name: 'Vegetarian soup', price: 4.80},
+  {name: 'Pureed root vegetable soup with smoked cheese', price: 8.00}
+];
 
-let coursesEn = [];
-let coursesFi = [];
-let languageSetting = 'fi';
+const validateMealName = (mealName) => {
+  const namePattern = /^[A-ZÅÄÖ]{1}[a-zåäöA-ZÅÄÖ0-9\-\ \/,()]{3,63}$/;
+  return namePattern.test(mealName);
 
-
-/**
- * Displays lunch menu items as html list
- *
- * @param {Array} menu - Lunch menu array
- */
-const renderMenu = (menu) => {
-  const list = document.querySelector('#sodexo');
-  list.innerHTML = '';
-  for (const item of menu) {
-    const listItem = document.createElement('li');
-    listItem.textContent = item;
-    list.appendChild(listItem);
-  }
 };
 
+for (const item of Object.values(menu)) {
+console.log('mealname ' + item.name + ' is valid:', validateMealName(item.name));
+}
 
-/**
- * Switch app lang en/fi
- */
-const switchLanguage = () => {
-  if (languageSetting === 'fi') {
-    languageSetting = 'en';
-    renderMenu(coursesEn);
-  } else {
-    languageSetting = 'fi';
-    renderMenu(coursesFi);
-  }
-  console.log('change language to: ', languageSetting);
+const sortMenu = () => {
+
+  const sortedMenu = menu.sort((a, b) => a.price - b.price);
+  return sortedMenu;
 };
 
-/**
- * Sorts menu alphapetically
- *
- * @param {Array} menu
- * @param {string} order
- * @returns Sorted menu array
- */
-const sortMenu = (menu, order) => {
-  if (order == 'desc') {
-    return menu.sort().reverse();
-  } else {
-    return menu.sort();
-  }
+console.log('sorted menu', sortedMenu(menu));
+
+const filterMealsByPriceLimit = (menu, priceLimit) => {
+ return menu.filter(item => item.price < priceLimit);
+
+};
+console.log('filtered menu', filterMealsByPriceLimit(menu, 5));
+
+const raisePricesByPercent = (menu, percent) => {
+  return menu.map(item => {
+    return {
+      name: item.name,
+      price: item.price * (1 + percent / 100)
+    };
+  });
 };
 
-/**
- * Eventhandler for sort menu button
- */
-const renderSortedMenu = () => {
-  if (languageSetting === 'en') {
-    renderMenu(sortMenu(coursesEn, 'asc'));
-  } else {
-    renderMenu(sortMenu(coursesFi, 'desc'));
-  }
+console.log('price raised:', raisePricesByPercent(menu, 15));
+
+const calculateFullMenuPrice = () => {
+ return menu.reduce((a, b) => {
+    return {price: a.price + b.price};
+  });
 };
 
-/**
- * Picks a random dish from lunch menu array
- *
- * @param {Array} menu
- * @returns string dish name
- */
-const pickRandomDish = (menu) => {
-  const randomIndex = Math.floor(Math.random() * menu.length);
-  return menu[randomIndex];
+console.log('total cost', calculateFullMenuPrice(menu));
+
+console.log('FazerMenu', FazerMenu);
+
+const selectVegetarianMeals = (menuData) => {
+  let vegetarianMeals = [];
+  console.log(menuData.LunchMenus[0].SetMenus);
+  for (const setMenu of menuData.LunchMenus[0].SetMenus) {
+    console.log(setMenu);
+    for (const meal of setMenu.Meals) {
+      if ( meal.Diets.icludes('Veg')) {
+        vegetarianMeals.push(meal.Name);
+      }
+    }
+  };
+
+  return vegetarianMeals;
 };
 
-const displayRandomDish = () => {
-  alert(pickRandomDish(coursesFi));
-};
-
-
-/**
- * Parses couse arrays from Sodexo json file
- *
- * @param {Object} sodexoDailyMenu
- */
-const parseSodexoMenu = (sodexoDailyMenu) => {
-  const courses = Object.values(sodexoDailyMenu);
-  for (const course of courses) {
-    coursesEn.push(course.title_en);
-    coursesFi.push(course.title_fi);
-  }
-};
-
-
-const init = () => {
-  parseSodexoMenu(Lunchmenu.courses);
-  document.querySelector('#switch-lang').addEventListener('click', switchLanguage);
-  document.querySelector('#sort-menu').addEventListener('click', renderSortedMenu);
-  document.querySelector('#pick-dish').addEventListener('click', displayRandomDish);
-  renderMenu(coursesFi);
-};
-init();
-
-
+console.log('vegetarian meals', selectVegetarianMeals(FazerMenu));
