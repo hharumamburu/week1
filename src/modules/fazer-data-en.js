@@ -1,6 +1,6 @@
 'use strict';
 
-import Lunchmenu from '../assets/fazer-menu.json';
+import Lunchmenu from '../assets/fazer-menu-en.json';
 
 console.log("menu json", Lunchmenu);
 
@@ -15,6 +15,6 @@ const parseFazerMenu = (fazerDailyMenu) => {
 
 parseFazerMenu(Lunchmenu, courses);
 
-const FazerData = {courses};
+const FazerDataEn = {courses};
 
-export default FazerData;
+export default FazerDataEn;

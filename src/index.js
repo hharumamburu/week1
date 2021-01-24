@@ -1,6 +1,8 @@
 'use strict';
 
 import SodexoData from './modules/sodexo-data';
+import FazerData from './modules/fazer-data';
+import FazerDataEn from './modules/fazer-data-en';
 
 let languageSetting = 'fi';
 
@@ -10,8 +12,19 @@ let languageSetting = 'fi';
  *
  * @param {Array} menu - Lunch menu array
  */
-const renderMenu = (menu) => {
+const renderSodexoMenu = (menu) => {
   const list = document.querySelector('#sodexo');
+  list.innerHTML = '';
+  for (const item of menu) {
+    const listItem = document.createElement('li');
+    listItem.textContent = item;
+    list.appendChild(listItem);
+  }
+
+};
+
+const renderFazerMenu = (menu) => {
+  const list = document.querySelector('#fazer');
   list.innerHTML = '';
   for (const item of menu) {
     const listItem = document.createElement('li');
@@ -20,6 +33,16 @@ const renderMenu = (menu) => {
   }
 };
 
+const renderFazerMenuEn = (menu) => {
+  const list = document.querySelector('#fazer');
+  list.innerHTML = '';
+  for (const item of menu) {
+    const listItem = document.createElement('li');
+    listItem.textContent = item;
+    list.appendChild(listItem);
+  }
+}
+
 
 /**
  * Switch app lang en/fi
@@ -27,10 +50,12 @@ const renderMenu = (menu) => {
 const switchLanguage = () => {
   if (languageSetting === 'fi') {
     languageSetting = 'en';
-    renderMenu(SodexoData.coursesEn);
+    renderSodexoMenu(SodexoData.coursesEn);
+    renderFazerMenu(FazerData.courses);
   } else {
     languageSetting = 'fi';
-    renderMenu(SodexoData.coursesFi);
+    renderSodexoMenu(SodexoData.coursesFi);
+    renderFazerMenuEn(FazerDataEn.courses);
   }
   console.log('change language to: ', languageSetting);
 };
@@ -55,9 +80,9 @@ const sortMenu = (menu, order) => {
  */
 const renderSortedMenu = () => {
   if (languageSetting === 'en') {
-    renderMenu(sortMenu(SodexoData.coursesEn, 'asc'));
+    renderSodexoMenu(sortMenu(SodexoData.coursesEn, 'asc'));
   } else {
-    renderMenu(sortMenu(SodexoData.coursesFi, 'desc'));
+    renderSodexoMenu(sortMenu(SodexoData.coursesFi, 'desc'));
   }
 };
 
@@ -84,7 +109,8 @@ const init = () => {
   document.querySelector('#switch-lang').addEventListener('click', switchLanguage);
   document.querySelector('#sort-menu').addEventListener('click', renderSortedMenu);
   document.querySelector('#pick-dish').addEventListener('click', displayRandomDish);
-  renderMenu(SodexoData.coursesFi);
+  renderSodexoMenu(SodexoData.coursesFi);
+  renderFazerMenuEn(FazerData.courses);
 };
 init();
 
